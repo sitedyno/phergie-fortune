@@ -1,6 +1,6 @@
 <?php
 /**
- * Phergie plugin for Display a fortune in channel (https://github.com/sitedyno/phergie-fortune)
+ * Phergie plugin for displaying a random fortune in channel (https://github.com/sitedyno/phergie-fortune)
  *
  * @link https://github.com/sitedyno/phergie-fortune for the canonical source repository
  * @copyright Copyright (c) 2017 Heath Nail (https://github.com/sitedyno)
@@ -37,24 +37,24 @@ class Plugin extends AbstractPlugin
     }
 
     /**
-     *
+     * Maps events to functions.
      *
      * @return array
      */
     public function getSubscribedEvents()
     {
         return [
-            'command.' => 'handleCommand',
+            'command.fortune' => 'handleFortune',
         ];
     }
 
     /**
-     *
+     * Display a random fortune in channel.
      *
      * @param \Phergie\Irc\Plugin\React\Command\CommandEvent $event
      * @param \Phergie\Irc\Bot\React\EventQueueInterface $queue
      */
-    public function handleCommand(Event $event, Queue $queue)
+    public function handleFortune(Event $event, Queue $queue)
     {
     }
 }
