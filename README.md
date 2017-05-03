@@ -1,6 +1,13 @@
 # sitedyno/phergie-fortune
 
-[Phergie](http://github.com/phergie/phergie-irc-bot-react/) plugin for displaying a fortune in channel.
+[Phergie](http://github.com/phergie/phergie-irc-bot-react/) plugin for
+displaying a fortune in channel.
+
+:warning: This plugin makes system calls! It should be fine unless
+misconfigured. You have been warned. :warning:
+
+This plugin assumes you have installed fortune on your \*nix like system. For
+more detailed information on databases see `man fortune`.
 
 [![Build Status](https://secure.travis-ci.org/sitedyno/phergie-fortune.png?branch=master)](http://travis-ci.org/sitedyno/phergie-fortune)
 [![codecov](https://codecov.io/gh/sitedyno/phergie-fortune/branch/master/graph/badge.svg)](https://codecov.io/gh/sitedyno/phergie-fortune)
