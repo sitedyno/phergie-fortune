@@ -25,7 +25,8 @@
     },
     "require-dev": {
         "phpunit/phpunit": "4.5.*",
-        "phake/phake": "^2.3"
+        "phake/phake": "^2.3",
+        "squizlabs/php_codesniffer": "^2.8"
     },
     "suggest": {
         "phergie/phergie-irc-plugin-react-commandhelp": "provides interactive help for commands"

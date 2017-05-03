@@ -159,7 +159,7 @@ class Plugin extends AbstractPlugin
     public function handleFortune(Event $event, Queue $queue)
     {
         $fortune = new Process($this->getFortuneCommand());
-        $fortune->on('exit', function($exitCode, $termSignal) {
+        $fortune->on('exit', function ($exitCode, $termSignal) {
             if (0 !== $exitCode) {
                 $cmd = $this->getFortuneCommand();
                 $this->logger->error("$cmd exited with exit code: $exitCode");
