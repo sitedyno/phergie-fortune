@@ -3,6 +3,7 @@
 [Phergie](http://github.com/phergie/phergie-irc-bot-react/) plugin for displaying a fortune in channel.
 
 [![Build Status](https://secure.travis-ci.org/sitedyno/phergie-fortune.png?branch=master)](http://travis-ci.org/sitedyno/phergie-fortune)
+[![codecov](https://codecov.io/gh/sitedyno/phergie-fortune/branch/master/graph/badge.svg)](https://codecov.io/gh/sitedyno/phergie-fortune)
 
 ## Install
 
