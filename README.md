@@ -1,6 +1,6 @@
 # sitedyno/phergie-fortune
 
-[Phergie](http://github.com/phergie/phergie-irc-bot-react/) plugin for Display a fortune in channel.
+[Phergie](http://github.com/phergie/phergie-irc-bot-react/) plugin for displaying a fortune in channel.
 
 [![Build Status](https://secure.travis-ci.org/sitedyno/phergie-fortune.png?branch=master)](http://travis-ci.org/sitedyno/phergie-fortune)
 
@@ -8,26 +8,30 @@
 
 The recommended method of installation is [through composer](http://getcomposer.org).
 
-`php composer.phar require sitedyno/phergie-fortune`
+`composer require sitedyno/phergie-fortune`
 
 See Phergie documentation for more information on
 [installing and enabling plugins](https://github.com/phergie/phergie-irc-bot-react/wiki/Usage#plugins).
 
 ## Provided Commands
 
-| Command    | Parameters        | Description           |
-|:----------:|-------------------|-----------------------|
-| {commmand} | [param1] [param2] | {description}         |
+| Command    | Parameters | Description                          |
+|:----------:|------------|--------------------------------------|
+| !fortune   | none       | Displays a random fortune in channel |
+
 ## Configuration
 
 ```php
 return [
     'plugins' => [
-        // configuration
+        // configuration, all is optional
         new \Sitedyno\PhergieFortune\Plugin([
-
-
-
+            // The path to the fortune binary. Defaults to '/usr/games/fortune'.
+            'binary-path' => '/usr/games/fortune',
+            // List of databases to use. Defaults to 'fortunes'. See `man fortune` for possible values.
+            'databases' => 'fortune',
+            // Use only short fortunes. Defaults to true.
+            'short' => true
         ])
     ]
 ];
@@ -45,4 +49,4 @@ php composer.phar install
 
 ## License
 
-Released under the BSD License. See `LICENSE`.
+Released under the MIT License. See `LICENSE.md`.
