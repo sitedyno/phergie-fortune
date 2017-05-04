@@ -121,11 +121,8 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         Phake::when($event)->getSource()->thenReturn('#sitedyno');
         Phake::when($event)->getNick()->thenReturn('sitedyno');
 
-        $plugin = new Plugin([
-            'binary-path' => 'echo',
-            'databases' => $fortune,
-            'short' => false
-        ]);
+        $plugin = new Plugin();
+        $plugin->setFortuneCommand("echo $fortune");
         $plugin->setLoop($loop);
 
         $plugin->handleFortune($event, $queue);
@@ -134,7 +131,39 @@ class PluginTest extends \PHPUnit_Framework_TestCase
 
         Phake::verify($queue)->ircPrivmsg(
             '#sitedyno',
-            "sitedyno: $fortune "
+            "sitedyno: $fortune"
+        );
+    }
+
+    /**
+     * Tests handleFortune() when short is false.
+     */
+    public function testHandleFortuneWhenShortIsFalse()
+    {
+        $event = Phake::mock('\Phergie\Irc\Plugin\React\Command\CommandEvent');
+        $queue = Phake::mock('\Phergie\Irc\Bot\React\EventQueueInterface');
+        $loop = \React\EventLoop\Factory::create();
+        $lineOne = "This is line one";
+        $lineTwo = "This is line two";
+
+        Phake::when($event)->getSource()->thenReturn('#sitedyno');
+        Phake::when($event)->getNick()->thenReturn('sitedyno');
+
+        $plugin = new Plugin(['short' => false]);
+        $plugin->setFortuneCommand("echo $lineOne; echo $lineTwo");
+        $plugin->setLoop($loop);
+
+        $plugin->handleFortune($event, $queue);
+
+        $loop->run();
+
+        Phake::verify($queue)->ircPrivmsg(
+            '#sitedyno',
+            "sitedyno your fortune: $lineOne"
+        );
+        Phake::verify($queue)->ircPrivmsg(
+            '#sitedyno',
+            "sitedyno your fortune: $lineTwo"
         );
     }
 

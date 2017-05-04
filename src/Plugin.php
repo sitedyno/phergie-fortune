@@ -39,6 +39,13 @@ class Plugin extends AbstractPlugin
     protected $databases = 'fortunes';
 
     /**
+     * The full command line to call to get a fortune.
+     *
+     * @var string
+     */
+    protected $fortuneCommand = '';
+
+    /**
      * Invalid binary path.
      *
      * @var int
@@ -90,6 +97,7 @@ class Plugin extends AbstractPlugin
         if (isset($config['short'])) {
             $this->setShort($config['short']);
         }
+        $this->setFortuneCommand();
     }
 
     /**
@@ -119,13 +127,7 @@ class Plugin extends AbstractPlugin
      */
     public function getFortuneCommand()
     {
-        if ($this->short) {
-            $short = ' -s';
-        } else {
-            $short = null;
-        }
-        $cmd = $this->binaryPath . $short . " " . $this->databases;
-        return $cmd;
+        return $this->fortuneCommand;
     }
 
     /**
@@ -158,21 +160,61 @@ class Plugin extends AbstractPlugin
      */
     public function handleFortune(Event $event, Queue $queue)
     {
-        $fortune = new Process($this->getFortuneCommand());
-        $fortune->on('exit', function ($exitCode, $termSignal) {
+        $fortuneProcess = new Process($this->getFortuneCommand());
+        $fortune = '';
+        $fortuneProcess->on('exit', function ($exitCode, $termSignal) use ($event, $queue, &$fortune) {
             if (0 !== $exitCode) {
                 $cmd = $this->getFortuneCommand();
                 $this->logger->error("$cmd exited with exit code: $exitCode");
+            } else {
+                $preparedFortune = $this->prepareFortune($fortune);
+                $this->queueFortune($event, $queue, $preparedFortune);
             }
         });
-        $fortune->start($this->getLoop());
-        $fortune->stdout->on('data', function ($chunk) use ($event, $queue) {
-            $chunk = str_replace("\n", " ", $chunk);
+        $fortuneProcess->start($this->getLoop());
+        $fortuneProcess->stdout->on('data', function ($chunk) use (&$fortune) {
+            $fortune .= $chunk;
+        });
+    }
+
+    /**
+     * Prepares a fortune to be sent to IRC.
+     *
+     * @param string $fortune
+     * @return array
+     */
+    protected function prepareFortune($fortune)
+    {
+        if ($this->getShort()) {
+            $fortune = str_replace("\n", " ", $fortune);
+            return [trim($fortune)];
+        }
+        return explode("\n", trim($fortune));
+    }
+
+    /**
+     * Queues a fortune to be sent to IRC.
+     *
+     * @param \Phergie\Irc\Plugin\React\Command\CommandEvent $event
+     * @param \Phergie\Irc\Bot\React\EventQueueInterface $queue
+     */
+    protected function queueFortune(Event $event, Queue $queue, $fortune)
+    {
+        if ($this->getShort()) {
             $queue->ircPrivmsg(
                 $event->getSource(),
-                $event->getNick() . ": " . $chunk
+                $event->getNick() . ": " . $fortune[0]
             );
-        });
+        } else {
+            foreach ($fortune as $i => $line) {
+                $this->getLoop()->addTimer($i, function () use ($event, $queue, $line) {
+                    $queue->ircPrivmsg(
+                        $event->getSource(),
+                        $event->getNick() . " your fortune: " . $line
+                    );
+                });
+            }
+        }
     }
 
     /**
@@ -205,6 +247,26 @@ class Plugin extends AbstractPlugin
             );
         }
         $this->databases = $databases;
+    }
+
+    /**
+     * Sets the full command line to call to get a fortune.
+     *
+     * @param string $command Override config if necessary.
+     * @return void
+     */
+    public function setFortuneCommand($command = '')
+    {
+        if (!empty($command)) {
+            $this->fortuneCommand = $command;
+            return;
+        }
+        if ($this->short) {
+            $short = ' -s';
+        } else {
+            $short = null;
+        }
+        $this->fortuneCommand = $this->binaryPath . $short . " " . $this->databases;
     }
 
     /**
