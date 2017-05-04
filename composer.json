@@ -41,6 +41,9 @@
             "Sitedyno\\PhergieFortune\\Tests\\": "tests"
         }
     },
+    "scripts": {
+      "cs-check": "phpcs --colors -p --standard=PSR1,PSR2 src/ tests/"
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"
