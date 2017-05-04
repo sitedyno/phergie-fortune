@@ -261,7 +261,7 @@ class Plugin extends AbstractPlugin
             $this->fortuneCommand = $command;
             return;
         }
-        if ($this->short) {
+        if ($this->getShort()) {
             $short = ' -s';
         } else {
             $short = null;
