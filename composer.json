@@ -1,6 +1,6 @@
 {
     "name": "sitedyno/phergie-fortune",
-    "description": "Phergie plugin for Display a fortune in channel",
+    "description": "Phergie plugin for displaying a fortune in channel",
     "keywords": [ "phergie", "irc", "bot", "plugin" ],
     "license": "MIT",
     "authors": [
