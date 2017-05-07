@@ -1,6 +1,6 @@
 # sitedyno/phergie-fortune
 
-[Phergie](http://github.com/phergie/phergie-irc-bot-react/) plugin for
+[Phergie](https://www.phergie.org/) plugin for
 displaying a fortune in channel.
 
 :warning: This plugin makes system calls! It should be fine unless
