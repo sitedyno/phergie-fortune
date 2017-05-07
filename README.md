@@ -34,6 +34,9 @@ See Phergie documentation for more information on
 ```php
 return [
     'plugins' => [
+        // dependency
+        new \Phergie\Irc\Plugin\React\Command\Plugin,
+
         // configuration, all is optional
         new \Sitedyno\PhergieFortune\Plugin([
             // The path to the fortune binary. Defaults to '/usr/games/fortune'.
